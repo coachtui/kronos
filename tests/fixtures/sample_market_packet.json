@@ -1,0 +1,460 @@
+{
+  "schema_version": "3.0",
+  "milestone": 3,
+  "mode": "daily",
+  "date": "2026-06-20",
+  "event": null,
+  "data_provider": "mock",
+  "projection_note": "The projection is one probabilistic input among many (price structure, volatility, the dollar, sector rotation, macro). It is not the source of truth and requires price confirmation. Do not name the underlying model.",
+  "tickers": {
+    "SPY": {
+      "ticker": "SPY",
+      "status": "ok",
+      "latest_close": 88.7105,
+      "previous_close": 88.829,
+      "daily_change_pct": -0.1334,
+      "ma_20": 91.7638,
+      "ma_50": 98.8047,
+      "ma_200": 97.1496,
+      "rsi_14": 3.03,
+      "atr_14": 1.0677,
+      "trend": "neutral_bearish",
+      "volatility": "normal",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        87.83
+      ],
+      "resistance_levels": [
+        107.32
+      ],
+      "projection": {
+        "status": "ok",
+        "direction": "up",
+        "projected_close": 89.1393,
+        "magnitude": 0.4834
+      }
+    },
+    "QQQ": {
+      "ticker": "QQQ",
+      "status": "ok",
+      "latest_close": 128.4382,
+      "previous_close": 128.8681,
+      "daily_change_pct": -0.3336,
+      "ma_20": 133.4997,
+      "ma_50": 138.8897,
+      "ma_200": 134.7067,
+      "rsi_14": 4.49,
+      "atr_14": 1.1257,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        125.17
+      ],
+      "resistance_levels": [
+        144.66
+      ],
+      "projection": {
+        "status": "ok",
+        "direction": "up",
+        "projected_close": 129.3896,
+        "magnitude": 0.7407
+      }
+    },
+    "^VIX": {
+      "ticker": "^VIX",
+      "status": "ok",
+      "latest_close": 126.3341,
+      "previous_close": 126.6471,
+      "daily_change_pct": -0.2471,
+      "ma_20": 130.7453,
+      "ma_50": 137.104,
+      "ma_200": 133.8392,
+      "rsi_14": 3.64,
+      "atr_14": 1.1056,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        124.37
+      ],
+      "resistance_levels": [
+        143.88
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "DX-Y.NYB": {
+      "ticker": "DX-Y.NYB",
+      "status": "ok",
+      "latest_close": 132.5065,
+      "previous_close": 131.9841,
+      "daily_change_pct": 0.3958,
+      "ma_20": 127.1047,
+      "ma_50": 123.0635,
+      "ma_200": 127.9197,
+      "rsi_14": 94.12,
+      "atr_14": 1.1156,
+      "trend": "neutral_bullish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "above",
+        "vs_50d": "above",
+        "vs_200d": "above"
+      },
+      "support_levels": [
+        118.06
+      ],
+      "resistance_levels": [
+        137.6
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLK": {
+      "ticker": "XLK",
+      "status": "ok",
+      "latest_close": 125.5462,
+      "previous_close": 126.0712,
+      "daily_change_pct": -0.4164,
+      "ma_20": 130.9534,
+      "ma_50": 134.943,
+      "ma_200": 130.0691,
+      "rsi_14": 5.94,
+      "atr_14": 1.1389,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        120.4
+      ],
+      "resistance_levels": [
+        139.9
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLF": {
+      "ticker": "XLF",
+      "status": "ok",
+      "latest_close": 123.2528,
+      "previous_close": 123.844,
+      "daily_change_pct": -0.4774,
+      "ma_20": 128.5543,
+      "ma_50": 130.4105,
+      "ma_200": 125.161,
+      "rsi_14": 9.07,
+      "atr_14": 1.1243,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        115.33
+      ],
+      "resistance_levels": [
+        134.82
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLE": {
+      "ticker": "XLE",
+      "status": "ok",
+      "latest_close": 122.9482,
+      "previous_close": 123.5449,
+      "daily_change_pct": -0.483,
+      "ma_20": 128.157,
+      "ma_50": 129.5539,
+      "ma_200": 124.2984,
+      "rsi_14": 9.97,
+      "atr_14": 1.1259,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        114.43
+      ],
+      "resistance_levels": [
+        133.92
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLI": {
+      "ticker": "XLI",
+      "status": "ok",
+      "latest_close": 124.4644,
+      "previous_close": 125.0234,
+      "daily_change_pct": -0.4471,
+      "ma_20": 129.9016,
+      "ma_50": 133.0782,
+      "ma_200": 127.986,
+      "rsi_14": 6.97,
+      "atr_14": 1.1368,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        118.25
+      ],
+      "resistance_levels": [
+        137.75
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLY": {
+      "ticker": "XLY",
+      "status": "ok",
+      "latest_close": 90.1639,
+      "previous_close": 90.243,
+      "daily_change_pct": -0.0877,
+      "ma_20": 92.9107,
+      "ma_50": 99.9856,
+      "ma_200": 98.6665,
+      "rsi_14": 2.98,
+      "atr_14": 1.0667,
+      "trend": "neutral_bearish",
+      "volatility": "normal",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        89.36
+      ],
+      "resistance_levels": [
+        108.85
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLP": {
+      "ticker": "XLP",
+      "status": "ok",
+      "latest_close": 129.3206,
+      "previous_close": 129.7217,
+      "daily_change_pct": -0.3092,
+      "ma_20": 134.2382,
+      "ma_50": 139.922,
+      "ma_200": 135.9604,
+      "rsi_14": 4.22,
+      "atr_14": 1.1032,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        126.45
+      ],
+      "resistance_levels": [
+        145.94
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLU": {
+      "ticker": "XLU",
+      "status": "ok",
+      "latest_close": 134.711,
+      "previous_close": 134.944,
+      "daily_change_pct": -0.1727,
+      "ma_20": 138.5977,
+      "ma_50": 145.35,
+      "ma_200": 142.7368,
+      "rsi_14": 3.3,
+      "atr_14": 1.0825,
+      "trend": "neutral_bearish",
+      "volatility": "low",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        133.36
+      ],
+      "resistance_levels": [
+        152.85
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    },
+    "XLV": {
+      "ticker": "XLV",
+      "status": "ok",
+      "latest_close": 85.9824,
+      "previous_close": 86.178,
+      "daily_change_pct": -0.227,
+      "ma_20": 89.607,
+      "ma_50": 96.4862,
+      "ma_200": 94.1826,
+      "rsi_14": 3.19,
+      "atr_14": 1.0755,
+      "trend": "neutral_bearish",
+      "volatility": "normal",
+      "price_vs_moving_averages": {
+        "vs_20d": "below",
+        "vs_50d": "below",
+        "vs_200d": "below"
+      },
+      "support_levels": [
+        84.82
+      ],
+      "resistance_levels": [
+        104.32
+      ],
+      "projection": {
+        "status": "skipped",
+        "direction": null,
+        "projected_close": null,
+        "magnitude": null
+      }
+    }
+  },
+  "market_regime": {
+    "risk_tone": "risk-off",
+    "volatility_tone": "high / stressed",
+    "sector_leadership": [
+      {
+        "ticker": "XLY",
+        "daily_change_pct": -0.0877
+      },
+      {
+        "ticker": "XLU",
+        "daily_change_pct": -0.1727
+      },
+      {
+        "ticker": "XLV",
+        "daily_change_pct": -0.227
+      }
+    ],
+    "sector_laggards": [
+      {
+        "ticker": "XLE",
+        "daily_change_pct": -0.483
+      },
+      {
+        "ticker": "XLF",
+        "daily_change_pct": -0.4774
+      },
+      {
+        "ticker": "XLI",
+        "daily_change_pct": -0.4471
+      }
+    ],
+    "spy_trend_summary": "SPY -0.13% on the day, neutral_bearish; below 50D, below 200D.",
+    "qqq_trend_summary": "QQQ -0.33% on the day, neutral_bearish; below 50D, below 200D.",
+    "vix_summary": {
+      "status": "ok",
+      "level": 126.3341,
+      "daily_change_pct": -0.2471,
+      "read": "high / stressed"
+    },
+    "dxy_summary": {
+      "status": "ok",
+      "symbol": "DX-Y.NYB",
+      "level": 132.5065,
+      "daily_change_pct": 0.3958,
+      "trend": "neutral_bullish"
+    }
+  },
+  "fear_greed": {
+    "status": "unavailable",
+    "source": null,
+    "score": null,
+    "classification": null,
+    "sub_indexes": []
+  },
+  "macro_calendar": {
+    "status": "unavailable",
+    "source": null,
+    "events": []
+  },
+  "rates_summary": {
+    "status": "unavailable",
+    "source": null,
+    "ten_year_yield": null,
+    "two_year_yield": null,
+    "fed_funds": null,
+    "summary": null
+  },
+  "wall_street_consensus": {
+    "status": "unavailable",
+    "source": null,
+    "summary": null,
+    "targets": []
+  },
+  "macro": {
+    "enabled": true
+  },
+  "errors": []
+}

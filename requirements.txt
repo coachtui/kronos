@@ -1,0 +1,21 @@
+# --- Milestone 1: data + Kronos forecast ---
+yfinance>=0.2.40
+pandas>=2.2.0
+pyarrow>=15.0.0
+numpy>=1.26.0
+
+# Kronos model runtime (vendored under vendor/kronos/model)
+torch>=2.2.0
+einops==0.8.1
+huggingface_hub==0.33.1
+safetensors>=0.4.0
+tqdm>=4.66.0
+
+# Config
+python-dotenv>=1.0.0
+
+# --- M3: script generation ---
+anthropic>=0.40.0
+
+# --- Added in later milestones ---
+# elevenlabs>=1.0.0       # M4: voiceover

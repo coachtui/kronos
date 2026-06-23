@@ -1,0 +1,28 @@
+# Secrets
+.env
+.env.local
+
+# Generated data & outputs
+data/raw/
+data/processed/
+data/cache/
+output/
+
+# Forecast log persists locally but is not committed
+logs/*.csv
+logs/*.jsonl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# HF model cache (if HF_HOME points inside the repo)
+.cache/
+
+# Local tooling
+.claude/
+
+# OS
+.DS_Store
