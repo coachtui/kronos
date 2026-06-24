@@ -19,3 +19,8 @@ anthropic>=0.40.0
 
 # --- News (M3) + ElevenLabs voiceover (M4) use raw HTTP ---
 requests>=2.32.0
+
+# --- M5: draft video assembler ---
+moviepy>=2.0
+pillow>=10.0
+imageio-ffmpeg>=0.5

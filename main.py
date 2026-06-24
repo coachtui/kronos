@@ -43,7 +43,7 @@ from providers import get_provider
 from signals import packet as pb
 from signals import validation
 
-MODES = {"daily", "stock", "earnings", "macro", "weekly", "validate", "voice"}
+MODES = {"daily", "stock", "earnings", "macro", "weekly", "validate", "voice", "video"}
 
 
 def _parse(rest) -> argparse.Namespace:
@@ -55,8 +55,9 @@ def _parse(rest) -> argparse.Namespace:
     p.add_argument("--no-audio", action="store_true", help="(generation is text-only by default; kept for compatibility)")
     p.add_argument("--from-fixture", metavar="PATH", help="load a saved packet instead of live fetch")
     p.add_argument("--validate", action="store_true", help="reconcile past forecasts with actuals")
-    p.add_argument("--date", help="date (YYYY-MM-DD) for the `voice` command (default: today)")
+    p.add_argument("--date", help="date (YYYY-MM-DD) for the `voice`/`video` command (default: today)")
     p.add_argument("--file", metavar="PATH", help="explicit voiceover .txt for the `voice` command")
+    p.add_argument("--images", metavar="DIR", help="chart-images folder for the `video` command (default: output/<date>/images)")
     return p.parse_args(rest)
 
 
@@ -122,6 +123,8 @@ def main(argv=None) -> int:
 
     if mode == "voice":  # audio-only step on an already-approved script (no Claude, no data)
         return _voice_command(args)
+    if mode == "video":  # assemble a draft .mp4 from audio + captions + chart images
+        return _video_command(args)
 
     provider = get_provider(config.DATA_PROVIDER, config.CACHE_DIR)
 
@@ -196,6 +199,43 @@ def _voice_command(args) -> int:
         return 1
     print(f"[voice] saved -> {paths['mp3']}")
     print(f"[voice] saved -> {paths['srt']}")
+    return 0
+
+
+def _video_command(args) -> int:
+    """Assemble a draft .mp4 from {date}'s audio + captions + chart images."""
+    from media import assemble
+
+    date = args.date or dt.date.today().isoformat()
+    out_dir = config.OUTPUT_DIR / date
+    stem = f"daily_brief_{date}"
+    audio = out_dir / f"{stem}.mp3"
+    srt = out_dir / f"{stem}.srt"
+    images_dir = Path(args.images) if args.images else out_dir / "images"
+    out_path = out_dir / f"{stem}_draft.mp4"
+
+    if not audio.exists():
+        print(f"[video] no audio at {audio} — run `python main.py voice` first.")
+        return 2
+    if not images_dir.exists() or not any(images_dir.glob("*")):
+        print(f"[video] drop your chart screenshots in {images_dir} "
+              "(named by ticker: SPY.png, QQQ.png, VIX.png, DXY.png, EWY.png, XLK.png, MU.png), "
+              "or pass --images DIR.")
+        return 2
+
+    print(f"[video] assembling draft from {images_dir} ...")
+    try:
+        res = assemble.build_video(audio, srt, images_dir, out_path)
+    except assemble.AssembleError as exc:
+        print(f"[video] {exc}")
+        return 1
+    print(f"[video] runtime {res['duration']}s | captions: {res['captions']} cues burned in")
+    print("[video] shot timeline:")
+    for start, end, name in res["shots"]:
+        print(f"          {start:>6.1f}s–{end:<6.1f}s  {name}")
+    if res["unmatched"]:
+        print(f"[video] not placed (rename to a ticker, e.g. SPY.png): {', '.join(res['unmatched'])}")
+    print(f"[video] saved -> {out_path}")
     return 0
 
 
