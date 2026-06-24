@@ -6,15 +6,18 @@ for the editorial strategy; this file is the **operations runbook**.
 
 ---
 
-## TL;DR — the daily run
+## TL;DR — the daily run (two steps, on purpose)
 
 ```bash
 cd /Users/tui/kronos
-.venv/bin/python main.py daily --no-audio
+.venv/bin/python main.py daily      # 1) build the TEXT package (no ElevenLabs charge)
+#    → review compliance, edit the voiceover.txt if needed
+.venv/bin/python main.py voice      # 2) voice it once → .mp3 + .srt (uses credits)
 ```
 
-Then: **review compliance → generate audio → pull charts → assemble in CapCut →
-post.** Output lands in `output/YYYY-MM-DD/`.
+Generation is **text-only** so you never burn ElevenLabs credits on a draft you
+haven't approved. The `voice` step is the *only* thing that uses credits — run it
+once, after the script is final. Output lands in `output/YYYY-MM-DD/`.
 
 > Tip: run `source .venv/bin/activate` once per terminal and you can drop the
 > `.venv/bin/` prefix (just `python main.py daily --no-audio`).
@@ -35,21 +38,36 @@ Put your keys in **`.env.local`** (never committed):
 ```env
 ANTHROPIC_API_KEY=sk-ant-...     # required — Claude script generation
 FINNHUB_API_KEY=...              # required — news / "why" behind moves (free at finnhub.io)
+ELEVENLABS_API_KEY=...           # required for audio — voiceover (elevenlabs.io)
+ELEVENLABS_VOICE_ID=...          # required for audio — the voice to use (see below)
 CLAUDE_MODEL=claude-sonnet-4-6   # optional — default model
+ELEVENLABS_MODEL=eleven_multilingual_v2   # optional — eleven_turbo_v2_5 is ~half the cost
 ```
 
 First run downloads the Kronos model from Hugging Face (one time, cached).
 Market data (yfinance) and earnings dates need no key.
 
+**Picking a voice ID:** in ElevenLabs → Voices, choose (or clone) a voice → copy
+its **Voice ID** → paste into `ELEVENLABS_VOICE_ID`.
+
+**Cost / credits:** ElevenLabs Creator = **121k credits/month**. Standard models
+charge 1 credit/char; `turbo_v2_5` (the default here) charges ~0.5. The spoken
+voiceover is the **condensed ~3-min cut** (~3.2k chars), so on turbo a daily brief
+is **~1.6k credits** → a full month of dailies ≈ **34k credits**, leaving ~87k for
+stock/earnings/macro videos. Two things keep you in budget: (1) **turbo** halves
+the cost, and (2) the **two-step workflow** means editing/re-running the script is
+free — you only spend credits on the final `voice` run.
+
 ---
 
 ## Daily workflow (the runbook)
 
-1. **Generate the package**
+1. **Generate the text package**
    ```bash
-   .venv/bin/python main.py daily --no-audio
+   .venv/bin/python main.py daily
    ```
-   Watch the summary line — it prints the output folder and the compliance verdict.
+   Text only — no ElevenLabs charge. Watch the summary line for the output folder
+   and compliance verdict; it also prints the `voice` command to run next.
 
 2. **Review compliance first** — open `daily_brief_DATE_compliance.md`.
    - `APPROVE` → good to use.
@@ -60,10 +78,16 @@ Market data (yfinance) and earnings dates need no key.
 3. **Read the script** — `daily_brief_DATE.md`. Sanity-check it against the real
    market (does the read match what actually happened?).
 
-4. **Generate the voiceover** — take `daily_brief_DATE_voiceover.txt` (clean
-   spoken text, short disclaimer already appended) and run it through ElevenLabs.
-   *(Automated TTS is a later milestone; for now paste it into ElevenLabs and save
-   the mp3 next to the other files.)*
+4. **Voice it** — once the script is approved:
+   ```bash
+   .venv/bin/python main.py voice                 # today's daily brief
+   .venv/bin/python main.py voice --date 2026-06-23
+   .venv/bin/python main.py voice --file output/DATE/stock_review_NVDA_DATE_voiceover.txt
+   ```
+   This reads the (possibly hand-edited) `*_voiceover.txt`, generates
+   `daily_brief_DATE.mp3` + `daily_brief_DATE.srt` (captions timed from ElevenLabs
+   word alignment), and prints the estimated credit cost. It's the **only** step
+   that uses credits — so editing/re-running the *script* is free.
 
 5. **Pull the charts** — `daily_brief_DATE_charts.md` lists exactly which
    TradingView charts to capture, the timeframe, and which segment each pairs with.
@@ -84,10 +108,11 @@ Market data (yfinance) and earnings dates need no key.
 
 | Command | Produces |
 |---|---|
-| `python main.py daily --no-audio` | Broad daily market brief (the default) |
-| `python main.py stock NVDA --no-audio` | Standalone single-stock review |
-| `python main.py earnings NVDA --event "earnings preview" --no-audio` | Earnings preview/reaction video |
-| `python main.py macro --event "FOMC decision" --no-audio` | Macro-event video |
+| `python main.py daily` | Broad daily market brief — **text package** (default) |
+| `python main.py stock NVDA` | Standalone single-stock review (text) |
+| `python main.py earnings NVDA --event "earnings preview"` | Earnings preview/reaction (text) |
+| `python main.py macro --event "FOMC decision"` | Macro-event video (text) |
+| `python main.py voice [--date D] [--file PATH]` | **Audio step** — `.mp3` + `.srt` from an approved voiceover.txt (uses credits) |
 | `python main.py validate` | Reconcile past forecasts vs. actuals (accuracy log) |
 
 Offline test (no live data / no API spend on data, uses a saved packet):
@@ -95,9 +120,10 @@ Offline test (no live data / no API spend on data, uses a saved packet):
 .venv/bin/python main.py daily --from-fixture tests/fixtures/sample_market_packet.json --no-audio
 ```
 
-Flags: `--no-audio` skips voiceover (audio is a later milestone, so this is the
-norm for now) · `--event "..."` labels macro/earnings videos · `--from-fixture PATH`
-uses a saved packet instead of fetching live.
+Flags: `--event "..."` labels macro/earnings videos · `--from-fixture PATH` uses a
+saved packet instead of fetching live · `--date` / `--file` target the `voice`
+step. (Generation is always text-only; `--no-audio` is still accepted but is now
+the default behaviour.)
 
 ---
 
@@ -110,6 +136,8 @@ daily_brief_DATE_charts.md           # TradingView chart pull-list
 daily_brief_DATE_shorts.md           # 3–5 short-form clip ideas
 daily_brief_DATE_youtube_metadata.md # titles, description, pinned comment, tags, chapters
 daily_brief_DATE_compliance.md       # approve / revise / reject report
+daily_brief_DATE.mp3                  # voiceover audio (unless --no-audio)
+daily_brief_DATE.srt                  # captions, timed (unless --no-audio)
 packet_daily_DATE.json               # the raw data packet Claude was given (for auditing)
 ```
 
@@ -147,11 +175,11 @@ Stock/earnings/macro modes use the same six files with a different prefix
 
 **Automated:** market data + overnight global lead-in + technicals + Kronos
 projection + news/earnings correlation → structured packet → Claude script,
-voiceover text, chart manifest, shorts, YouTube metadata, and a compliance review.
+voiceover text, chart manifest, shorts, YouTube metadata, compliance review,
+**ElevenLabs voiceover (.mp3), and timed captions (.srt).**
 
-**Still manual (by design, until proven):** ElevenLabs audio, caption files, video
-assembly (CapCut), pulling charts, and posting. Human review before publishing is
+**Still manual (by design, until proven):** video assembly (CapCut), pulling
+charts from TradingView, and posting. Human review before publishing is
 intentional — see the roadmap in [`README.md`](README.md).
 
-> Later: audio/captions (M4), then optional scheduling. Until then, keep a human in
-> the loop on every post.
+> Later: optional scheduling. Until then, keep a human in the loop on every post.

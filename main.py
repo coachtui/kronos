@@ -1,17 +1,24 @@
 """kronos-brief CLI — mode-based content engine (Milestone 3, revised).
 
+Two steps, so audio is never charged by accident:
+    1. generate the TEXT package (free of ElevenLabs), review/approve it
+    2. `voice` it once to produce the .mp3 + .srt
+
 Modes:
     daily     broad daily market brief (default)
     stock     individual stock review
     earnings  earnings preview / reaction
     macro     macro-event video
+    voice     generate audio (.mp3 + .srt) from an already-approved voiceover.txt
     weekly    longer weekly review (future — not implemented yet)
 
 Preferred CLI:
-    python main.py daily --no-audio
-    python main.py stock NVDA --no-audio
-    python main.py earnings NVDA --event "earnings preview" --no-audio
-    python main.py macro --event "FOMC decision" --no-audio
+    python main.py daily                       # 1) build the text package
+    python main.py voice                       # 2) voice today's daily brief
+    python main.py stock NVDA
+    python main.py voice --file output/DATE/stock_review_NVDA_DATE_voiceover.txt
+    python main.py earnings NVDA --event "earnings preview"
+    python main.py macro --event "FOMC decision"
     python main.py validate
 
 Backward-compatible flag form (no subcommand):
@@ -20,11 +27,12 @@ Backward-compatible flag form (no subcommand):
     python main.py --macro --no-audio         -> daily brief with macro section
     python main.py --macro --event X          -> separate macro-event video
 
-No audio, captions, or posting yet.
+Audio (.mp3) + captions (.srt) come from the separate `voice` step. No posting yet.
 """
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import sys
 from pathlib import Path
@@ -35,7 +43,7 @@ from providers import get_provider
 from signals import packet as pb
 from signals import validation
 
-MODES = {"daily", "stock", "earnings", "macro", "weekly", "validate"}
+MODES = {"daily", "stock", "earnings", "macro", "weekly", "validate", "voice"}
 
 
 def _parse(rest) -> argparse.Namespace:
@@ -44,9 +52,11 @@ def _parse(rest) -> argparse.Namespace:
     p.add_argument("--event", help="event label (macro / earnings modes)")
     p.add_argument("--stock", metavar="TICKER", help="[flag form] generate a stock review")
     p.add_argument("--macro", action="store_true", help="[flag form] macro section / macro mode")
-    p.add_argument("--no-audio", action="store_true", help="skip voiceover (M4; no effect yet)")
+    p.add_argument("--no-audio", action="store_true", help="(generation is text-only by default; kept for compatibility)")
     p.add_argument("--from-fixture", metavar="PATH", help="load a saved packet instead of live fetch")
     p.add_argument("--validate", action="store_true", help="reconcile past forecasts with actuals")
+    p.add_argument("--date", help="date (YYYY-MM-DD) for the `voice` command (default: today)")
+    p.add_argument("--file", metavar="PATH", help="explicit voiceover .txt for the `voice` command")
     return p.parse_args(rest)
 
 
@@ -110,6 +120,9 @@ def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     mode, ticker, event, args = _resolve(argv)
 
+    if mode == "voice":  # audio-only step on an already-approved script (no Claude, no data)
+        return _voice_command(args)
+
     provider = get_provider(config.DATA_PROVIDER, config.CACHE_DIR)
 
     if mode == "validate":
@@ -141,9 +154,48 @@ def main(argv=None) -> int:
     report = compliance.run_compliance_check(package["long_form_script"], packet, mode=mode)
 
     written = content_package.write_package(packet, package, report)
-    if args.no_audio:
-        print("[audio] --no-audio set; skipping voiceover (M4).")
     _print_summary(written, report)
+    # Generation is text-only and never charges ElevenLabs. Approve the script,
+    # then voice it separately:
+    print(f"[next] review the script, then run:  python main.py voice "
+          f"{'' if mode == 'daily' else '--file ' + str(written['voiceover'])}".rstrip())
+    return 0
+
+
+def _voice_command(args) -> int:
+    """Generate .mp3 + .srt from an already-approved voiceover.txt (no Claude)."""
+    import media
+
+    if args.file:
+        path = Path(args.file)
+    else:
+        date = args.date or dt.date.today().isoformat()
+        path = config.OUTPUT_DIR / date / f"daily_brief_{date}_voiceover.txt"
+
+    if not path.exists():
+        print(f"[voice] no voiceover file at {path}")
+        print("[voice] generate the script first (e.g. `python main.py daily`), "
+              "or pass --file PATH / --date YYYY-MM-DD.")
+        return 2
+
+    text = path.read_text()
+    out_dir = path.parent
+    suffix = "_voiceover.txt"
+    stem = path.name[: -len(suffix)] if path.name.endswith(suffix) else path.stem
+
+    per_char = 0.5 if any(m in config.ELEVENLABS_MODEL for m in ("turbo", "flash")) else 1.0
+    print(f"[voice] {len(text):,} chars via ElevenLabs ({config.ELEVENLABS_MODEL}) "
+          f"≈ {int(len(text) * per_char):,} credits ...")
+    try:
+        paths = media.generate_voiceover(text, out_dir, stem)
+    except media.MissingVoiceConfigError as exc:
+        print(f"[voice] {exc}")
+        return 1
+    except Exception as exc:  # noqa: BLE001
+        print(f"[voice] ElevenLabs error: {type(exc).__name__}: {exc}")
+        return 1
+    print(f"[voice] saved -> {paths['mp3']}")
+    print(f"[voice] saved -> {paths['srt']}")
     return 0
 
 

@@ -17,5 +17,5 @@ python-dotenv>=1.0.0
 # --- M3: script generation ---
 anthropic>=0.40.0
 
-# --- Added in later milestones ---
-# elevenlabs>=1.0.0       # M4: voiceover
+# --- News (M3) + ElevenLabs voiceover (M4) use raw HTTP ---
+requests>=2.32.0

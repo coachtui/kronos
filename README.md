@@ -118,7 +118,9 @@ CPU by default (`KRONOS_DEVICE=cpu`; `mps`/`cuda:0` also supported).
 | `signals/packet.py` | assembles the structured market source packet JSON |
 | `editorial/brief_generator.py` | Claude call → content package (structured output) |
 | `editorial/compliance.py` | hybrid compliance review (local scan + Claude) |
-| `editorial/content_package.py` | renders the 6 content-package output files |
+| `editorial/content_package.py` | renders the content-package output files |
+| `media/elevenlabs.py` | ElevenLabs TTS (with-timestamps) |
+| `media/captions.py` | builds `.srt` from word-level alignment |
 | `editorial/prompt_loader.py` + `prompts/` | shared house rules + per-mode templates (daily, stock, earnings, macro, shorts, compliance) |
 | `signals/kronos_predictor.py` | Kronos wrapper, graceful failure |
 | `signals/validation.py` | `logs/forecast_history.csv` — forecast accuracy log |
@@ -130,7 +132,7 @@ CPU by default (`KRONOS_DEVICE=cpu`; `mps`/`cuda:0` also supported).
 - **M1** ✅ SPY fetch + cache + Kronos forecast + log + graceful failure
 - **M2** ✅ Full ticker universe, technical signals, structured brief JSON packet
 - **M3** ✅ Claude content package — script + voiceover text + charts + shorts + metadata + compliance
-- **M4** ElevenLabs voiceover + captions
+- **M4** ✅ ElevenLabs voiceover (.mp3) + timed captions (.srt)
 - **M5** `--stock` spotlight + `--macro` segment
 - **M6** `--validate` outcome matching + Kronos accuracy report
 - **M7** human-review workflow before any posting

@@ -147,10 +147,16 @@ NOT need to write them verbatim, but DO include the marked spots:
 
 - `long_form_script`: the full segmented script for this mode (segments given
   below). Omit OPTIONAL sections when their data is absent.
-- `voiceover`: the SAME narration as clean spoken text ONLY — no section markers,
-  no `[CHART: …]` notes, no markdown, no tables, no production notes. Just the
-  words to be read aloud, in order. Do NOT include a disclaimer — the pipeline
-  appends the spoken disclaimer.
+- `voiceover`: a SELF-CONTAINED, CONDENSED spoken version of today's read —
+  target **~450–520 words (about a 3-minute read)**, NOT a full reading of the
+  long script. It must stand on its own as a tight daily brief and hit, in order:
+  a quick hook, what moved and WHY (the catalyst), the tech-vs-market read, the
+  2–3 levels that matter, the base-case read with its key condition, and the next
+  catalyst to watch. Keep the channel voice (confident, analytical, engaging).
+  Clean spoken text ONLY — no section markers, no `[CHART: …]` notes, no markdown,
+  no tables, no headings, no production notes. Do NOT include a disclaimer — the
+  pipeline appends the spoken disclaimer. (The full detail lives in
+  `long_form_script`; this is the shorter audio cut.)
 - `thesis`: `{stance: bullish|bearish|neutral, conditions: "..."}` — the overall
   directional lean WITH its conditions.
 - `charts`: chart callout manifest (ticker, timeframe, segment, focus, overlays,
