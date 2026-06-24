@@ -24,6 +24,17 @@ sections when their data is absent (state "unavailable" in one line if helpful).
 [DISCLAIMER]
 ```
 
+## After-hours catalyst (use `after_hours` — this is the headline)
+
+If the `after_hours` block has movers, a flagged earnings name just reported and
+the post-market is reacting — this is the FRESHEST and most important signal, so
+LEAD the brief with it (in [INTRO] and [MARKET SNAPSHOT]) before the regular-session
+recap. State the actual post-market % moves from the data (the reporter plus the
+sympathy names/ETFs), and reframe the near-term read: the catalyst the setup was
+watching has now CONFIRMED or DENIED. This is a reported result, not speculation —
+state it factually. Still no buy/sell calls or invented earnings numbers (only the
+price moves in the data). If `after_hours` is unavailable/none, ignore this.
+
 ## Catalysts in the daily brief (do NOT let one name take over)
 
 The daily brief is a whole-market view. A single stock, earnings report, or macro

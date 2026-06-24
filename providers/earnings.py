@@ -67,6 +67,34 @@ def get_earnings_calendar(tickers: list[str], horizon_days: int = 7) -> dict:
             "horizon_days": horizon_days, "upcoming": upcoming}
 
 
+def get_after_hours(tickers: list[str], min_abs_pct: float = 2.5) -> dict:
+    """Post-market movers among ``tickers`` (the earnings-day reaction).
+
+    Returns names whose post-market move exceeds ``min_abs_pct``, sorted by move.
+    Degrades to status 'none'/'unavailable'; never raises.
+    """
+    import yfinance as yf
+
+    movers = []
+    for t in tickers:
+        try:
+            info = yf.Ticker(t).get_info()
+        except Exception:  # noqa: BLE001
+            continue
+        pc, pp = info.get("postMarketChangePercent"), info.get("postMarketPrice")
+        if pc is None or pp is None or abs(pc) < min_abs_pct:
+            continue
+        movers.append({
+            "ticker": t,
+            "name": info.get("shortName"),
+            "post_change_pct": round(float(pc), 2),
+            "post_price": round(float(pp), 2),
+            "reg_change_pct": round(float(info.get("regularMarketChangePercent") or 0), 2),
+        })
+    movers.sort(key=lambda m: m["post_change_pct"], reverse=True)
+    return {"status": "ok" if movers else "none", "source": "yfinance", "movers": movers}
+
+
 def get_ticker_earnings(ticker: str) -> dict:
     """Next earnings date for a single ticker (stock/earnings modes)."""
     today = dt.date.today()

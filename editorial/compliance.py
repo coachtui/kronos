@@ -146,6 +146,17 @@ def _claude_review(script: str, packet: dict, mode: str, client, model: str) -> 
     return json.loads(text) if text else None
 
 
+_WITHDRAWN_MARKERS = (
+    "withdraw", "no change needed", "no genuine violation", "no violation here",
+    "not a genuine violation", "no actual violation",
+)
+
+
+def _is_withdrawn(flag: dict) -> bool:
+    blob = ((flag.get("reason") or "") + " " + (flag.get("suggested_rewrite") or "")).lower()
+    return any(m in blob for m in _WITHDRAWN_MARKERS)
+
+
 def run_compliance_check(
     script: str, packet: dict, mode: str | None = None, client=None, model: str | None = None
 ) -> dict:
@@ -160,10 +171,16 @@ def run_compliance_check(
         merged["sources"] = ["local"]
         return merged
 
-    flags = local["flagged_lines"] + claude.get("flagged_lines", [])
-    rec = max(local["final_recommendation"], claude.get("final_recommendation", "approve"),
-              key=lambda r: _SEVERITY.get(r, 0))
-    status = "fail" if (local["status"] == "fail" or claude.get("status") == "fail") else "pass"
+    # Drop self-withdrawn / no-issue items the reviewer sometimes still emits.
+    claude_flags = [f for f in claude.get("flagged_lines", []) if not _is_withdrawn(f)]
+    claude_rec = claude.get("final_recommendation", "approve") if claude_flags else "approve"
+    claude_status = claude.get("status", "pass") if claude_flags else "pass"
+
+    flags = local["flagged_lines"] + claude_flags
+    rec = max(local["final_recommendation"], claude_rec, key=lambda r: _SEVERITY.get(r, 0))
+    status = "fail" if (local["status"] == "fail" or claude_status == "fail") else "pass"
+    if not flags:  # nothing real survived → clean
+        rec, status = "approve", "pass"
     return {
         "status": status,
         "flagged_lines": flags,

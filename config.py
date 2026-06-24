@@ -65,6 +65,12 @@ EARNINGS_WATCHLIST = [
     "AVGO", "MU", "AMD", "TSLA", "NFLX", "JPM",
 ]
 EARNINGS_HORIZON_DAYS = int(os.getenv("EARNINGS_HORIZON_DAYS", "7"))
+# When a watchlist name reports earnings TODAY, the pipeline checks these for an
+# after-hours reaction (the reporter + sector ETFs + likely sympathy names).
+AFTER_HOURS_WATCH = sorted(set(EARNINGS_WATCHLIST + SECTOR_ETFS + [
+    "SMH", "SOXX", "DRAM", "WDC", "STX", "SNDK", "TSM", "ASML", "ARM", "DELL",
+]))
+AFTER_HOURS_MIN_PCT = float(os.getenv("AFTER_HOURS_MIN_PCT", "2.5"))
 
 # --- Overnight / cross-market lead-in (broad & general, NOT industry-specific) ---
 # The global equity sessions + cross-asset moves that PRECEDE the US open. Their

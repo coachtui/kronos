@@ -192,6 +192,7 @@ def _assemble(
 
     # --- news + earnings + cross-market feeds (degrade to unavailable, never crash) ---
     cross_market = {"status": "unavailable", "source": None, "markets": []}
+    after_hours = {"status": "unavailable", "source": None, "movers": []}
     if include_feeds:
         if mode in ("stock", "earnings") and focus_ticker:
             news = news_feed.get_company_news(focus_ticker)
@@ -200,6 +201,10 @@ def _assemble(
             news = news_feed.get_market_news()
             earnings_cal = earnings_feed.get_earnings_calendar(config.EARNINGS_WATCHLIST, config.EARNINGS_HORIZON_DAYS)
             cross_market = _build_cross_market(provider)
+            # If a watchlist name reports TODAY, capture the after-hours reaction.
+            if any(e.get("days_until") == 0 for e in earnings_cal.get("upcoming", [])):
+                after_hours = earnings_feed.get_after_hours(
+                    config.AFTER_HOURS_WATCH, config.AFTER_HOURS_MIN_PCT)
     else:
         news = {"status": "unavailable", "source": None, "headlines": []}
         earnings_cal = {"status": "unavailable", "source": None, "upcoming": []}
@@ -217,6 +222,7 @@ def _assemble(
         "news": news,
         "earnings_calendar": earnings_cal,
         "cross_market": cross_market,
+        "after_hours": after_hours,
         **_placeholders(),
         "macro": {"enabled": bool(macro_enabled)},
         "errors": errors,
