@@ -50,13 +50,12 @@ Market data (yfinance) and earnings dates need no key.
 **Picking a voice ID:** in ElevenLabs → Voices, choose (or clone) a voice → copy
 its **Voice ID** → paste into `ELEVENLABS_VOICE_ID`.
 
-**Cost / credits:** ElevenLabs Creator = **121k credits/month**. Standard models
-charge 1 credit/char; `turbo_v2_5` (the default here) charges ~0.5. The spoken
-voiceover is the **condensed ~3-min cut** (~3.2k chars), so on turbo a daily brief
-is **~1.6k credits** → a full month of dailies ≈ **34k credits**, leaving ~87k for
-stock/earnings/macro videos. Two things keep you in budget: (1) **turbo** halves
-the cost, and (2) the **two-step workflow** means editing/re-running the script is
-free — you only spend credits on the final `voice` run.
+**Cost / credits (measured):** ElevenLabs Creator = **121k credits/month**. A real
+condensed daily (~3.3k chars on `turbo_v2_5`) measured **~915 credits ≈ $0.17**.
+So 21 dailies/month ≈ **19k credits (~16% of the plan, ~$3.50)** — leaving ~100k
+for stock/earnings/macro videos and Shorts. Two things keep it cheap: (1) **turbo**
+(the default), and (2) the **two-step workflow** — editing/re-running the *script*
+is free; you only spend credits on the final `voice` run.
 
 ---
 

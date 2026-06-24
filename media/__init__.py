@@ -5,6 +5,7 @@ from pathlib import Path
 
 from media import captions
 from media import elevenlabs as tts
+from media import text as _text
 from media.elevenlabs import MissingVoiceConfigError, is_configured
 
 __all__ = ["generate_voiceover", "MissingVoiceConfigError", "is_configured"]
@@ -17,7 +18,8 @@ def generate_voiceover(voiceover_text: str, out_dir: Path, stem: str) -> dict[st
     if not configured (caller handles the skip); request errors propagate.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    result = tts.synthesize(voiceover_text)
+    spoken = _text.normalize_for_speech(voiceover_text)  # fix "$733.84" etc. before TTS
+    result = tts.synthesize(spoken)
 
     mp3_path = out_dir / f"{stem}.mp3"
     mp3_path.write_bytes(result["audio"])

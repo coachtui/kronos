@@ -157,6 +157,13 @@ NOT need to write them verbatim, but DO include the marked spots:
   no tables, no headings, no production notes. Do NOT include a disclaimer — the
   pipeline appends the spoken disclaimer. (The full detail lives in
   `long_form_script`; this is the shorter audio cut.)
+  **Numbers for speech (important):** write prices and levels the way they should
+  be *spoken*. DROP the "$" sign and ROUND to a whole number or one decimal —
+  e.g. "SPY around 734", "the 730 level", "QQQ near 715", "VIX at 19.4", "the
+  dollar's RSI near 75". A text-to-speech engine misreads "$733.84" as "733
+  dollars and 84 dollars", so never write a "$" or cents-level price in the
+  voiceover. Percentages are fine spoken out ("down 1.4 percent"). Exact figures
+  belong in `long_form_script`, not the spoken cut.
 - `thesis`: `{stance: bullish|bearish|neutral, conditions: "..."}` — the overall
   directional lean WITH its conditions.
 - `charts`: chart callout manifest (ticker, timeframe, segment, focus, overlays,
