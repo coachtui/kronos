@@ -88,13 +88,21 @@ def chapters_from_srt(cues, min_gap: float = 11.0) -> list[tuple[float, str]]:
     """
     chapters = [(0.0, "Intro")]
     last = 0.0
-    for label, kws in CHAPTER_TOPICS:
-        for start, _end, text in cues:
-            if start <= last + min_gap:
+    used: set[str] = set()
+    # Walk captions in time order; start a chapter at the first cue that hits a
+    # not-yet-used topic. This follows the brief's ACTUAL order (e.g. an
+    # after-hours-led brief that opens on Micron), not a fixed topic sequence.
+    for start, _end, text in cues:
+        if start <= last + min_gap:
+            continue
+        low = text.lower()
+        for label, kws in CHAPTER_TOPICS:
+            if label in used:
                 continue
-            if any(k in text.lower() for k in kws):
+            if any(k in low for k in kws):
                 chapters.append((start, label))
                 last = start
+                used.add(label)
                 break
     return chapters
 
