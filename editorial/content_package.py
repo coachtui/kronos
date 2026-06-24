@@ -101,6 +101,28 @@ def _voiceover_txt(pkg: dict) -> str:
     return body + "\n"
 
 
+def _cards_md(date: str, pkg: dict) -> str:
+    out = [f"# On-Screen Text Cards — {date}\n",
+           "Copy each block into a CapCut text box — short and glanceable.\n"]
+    n = 0
+    for c in pkg.get("cards", []) or []:
+        n += 1
+        title = (c.get("title") or "").strip()
+        placement = (c.get("placement") or "").strip()
+        body = "\n".join(l for l in c.get("lines", []) if l)
+        block = (f"{title}\n" if title else "") + body
+        head = f"## CARD {n} — {title}" + (f"   ·   {placement}" if placement else "")
+        out.append(f"{head}\n```\n{block}\n```\n")
+    # deterministic outro + disclaimer cards
+    n += 1
+    out.append(f"## CARD {n} — SUBSCRIBE   ·   outro\n"
+               "```\nSUBSCRIBE FOR THE DAILY BRIEF\nNew every market session\n```\n")
+    n += 1
+    out.append(f"## CARD {n} — DISCLAIMER   ·   outro\n"
+               f"```\n{config.CARD_DISCLAIMER}\n```\n")
+    return "\n".join(out)
+
+
 def _compliance_md(date: str, report: dict) -> str:
     lines = [
         f"# Compliance Report — {date}\n",
@@ -134,6 +156,7 @@ def write_package(packet: dict, package: dict, compliance: dict) -> dict[str, Pa
         "voiceover": (out_dir / f"{stem}_voiceover.txt", _voiceover_txt(package)),
         "charts": (out_dir / f"{stem}_charts.md", _charts_md(date, package)),
         "shorts": (out_dir / f"{stem}_shorts.md", _shorts_md(date, package)),
+        "cards": (out_dir / f"{stem}_cards.md", _cards_md(date, package)),
         "metadata": (out_dir / f"{stem}_youtube_metadata.md", _metadata_md(date, package)),
         "compliance": (out_dir / f"{stem}_compliance.md", _compliance_md(date, compliance)),
     }

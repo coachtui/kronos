@@ -171,3 +171,11 @@ NOT need to write them verbatim, but DO include the marked spots:
 - `shorts`: 3–5 short-form clip ideas (see SHORTS INSTRUCTIONS).
 - `youtube_metadata`: title_options, recommended_title, description,
   pinned_comment, hashtags, chapters, disclaimer.
+- `cards`: 5–7 on-screen TEXT cards for the video editor — short and glanceable,
+  data-forward (numbers are good), in the channel tone. Each card has a `title`
+  (the on-screen heading, e.g. "WHAT DROVE THE SELLOFF", "LEVELS I'M WATCHING"), a
+  few short `lines` (≤ ~8 words each — stats, levels, or a one-line point), and a
+  `placement` label naming the beat it sits on (e.g. "intro", "today's tape",
+  "what drove it", "sector rotation", "catalyst", "levels"). Use ONLY packet data;
+  no hype. Do NOT create a subscribe/CTA or disclaimer card — the pipeline appends
+  those.

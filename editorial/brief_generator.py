@@ -99,8 +99,22 @@ CONTENT_SCHEMA: dict[str, Any] = {
             "required": ["title_options", "recommended_title", "description",
                          "pinned_comment", "hashtags", "chapters", "disclaimer"],
         },
+        "cards": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    "title": {"type": "string"},
+                    "lines": {"type": "array", "items": {"type": "string"}},
+                    "placement": {"type": "string"},
+                },
+                "required": ["title", "lines", "placement"],
+            },
+        },
     },
-    "required": ["long_form_script", "voiceover", "thesis", "charts", "shorts", "youtube_metadata"],
+    "required": ["long_form_script", "voiceover", "thesis", "charts", "shorts",
+                 "youtube_metadata", "cards"],
 }
 
 

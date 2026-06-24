@@ -110,6 +110,12 @@ FULL_DISCLAIMER = (
     "investment decisions."
 )
 
+# Short on-screen disclaimer card (the pipeline appends it to every cards file).
+CARD_DISCLAIMER = (
+    "Educational only. Not financial advice.\n"
+    "AI-assisted. Projections may be wrong."
+)
+
 # --- API keys (read lazily by the layers that need them) ---
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
