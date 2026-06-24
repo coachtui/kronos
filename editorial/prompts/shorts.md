@@ -1,13 +1,17 @@
 # SHORTS INSTRUCTIONS
 
 Produce 3 to 5 short-form clip ideas (`shorts`) for YouTube Shorts, TikTok, and
-Instagram Reels, pulled from the long-form brief. Each clip must include:
+Instagram Reels. Each clip is a CUT FROM THE CONDENSED VIDEO (the `voiceover`) —
+so it can be clipped straight from the finished video, no separate recording.
+Each clip must include:
 
 - `title`: punchy, non-hype clip title
-- `hook`: the first spoken line that earns the next 3 seconds
-- `start_timestamp` / `end_timestamp`: estimated clip window in `MM:SS` form,
-  consistent with the long-form pacing
-- `spoken_excerpt`: a short spoken excerpt or tight summary of the clip
+- `hook`: a short on-screen overlay line that earns the next 3 seconds
+- `start_timestamp` / `end_timestamp`: a clip window in `M:SS` form that falls
+  WITHIN the ~3–4 minute video (between 0:00 and ~4:00) — a 20–45 second slice.
+  These are estimates; the pipeline snaps them to the real captions.
+- `spoken_excerpt`: the ACTUAL words from the `voiceover` for this clip (a verbatim
+  span), NOT a paraphrase or a summary — so the excerpt matches the audio you cut.
 - `caption`: on-screen caption text
 - `visual`: which chart/visual to pair with it (reference a ticker + timeframe
   present in the packet)
