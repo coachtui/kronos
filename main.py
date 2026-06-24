@@ -199,6 +199,17 @@ def _voice_command(args) -> int:
         return 1
     print(f"[voice] saved -> {paths['mp3']}")
     print(f"[voice] saved -> {paths['srt']}")
+
+    # Fix YouTube chapters to REAL timestamps from the just-generated captions.
+    meta = out_dir / f"{stem}_youtube_metadata.md"
+    if meta.exists():
+        try:
+            from media.assemble import chapters_from_srt, parse_srt
+            chapters = chapters_from_srt(parse_srt(paths["srt"]))
+            content_package.update_metadata_chapters(meta, chapters)
+            print(f"[voice] updated YouTube chapters in {meta.name} ({len(chapters)} markers)")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[voice] chapter update skipped: {type(exc).__name__}: {exc}")
     return 0
 
 

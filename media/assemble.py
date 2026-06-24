@@ -48,15 +48,55 @@ def _ts(t: str) -> float:
 
 
 def parse_srt(path: Path) -> list[tuple[float, float, str]]:
-    cues = []
+    cues: list[tuple[float, float, str]] = []
     for block in re.split(r"\n\s*\n", path.read_text().strip()):
         lines = [l for l in block.splitlines() if l.strip()]
-        if len(lines) < 2:
+        if not lines:
             continue
-        m = re.search(r"(\d\d:\d\d:\d\d,\d+)\s*-->\s*(\d\d:\d\d:\d\d,\d+)", lines[1])
+        ts_idx = next((i for i, l in enumerate(lines) if "-->" in l), None)
+        if ts_idx is None:  # orphaned text (malformed cue) -> attach to previous
+            if cues:
+                s, e, t = cues[-1]
+                cues[-1] = (s, e, f"{t} {' '.join(lines)}".strip())
+            continue
+        m = re.search(r"(\d\d:\d\d:\d\d,\d+)\s*-->\s*(\d\d:\d\d:\d\d,\d+)", lines[ts_idx])
         if m:
-            cues.append((_ts(m.group(1)), _ts(m.group(2)), " ".join(lines[2:])))
+            cues.append((_ts(m.group(1)), _ts(m.group(2)), " ".join(lines[ts_idx + 1:])))
     return cues
+
+
+# Ordered topics for YouTube chapters, detected in the captions (real timings).
+CHAPTER_TOPICS: list[tuple[str, list[str]]] = [
+    ("Overnight: Asia Sells Off", ["asia", "ewy", "korea", "kospi", "overnight", "nikkei"]),
+    ("Tech vs the Broad Market", ["qqq", "nasdaq", "lagging", "tech led"]),
+    ("What's Driving It", ["drove this", "converging", "forces", "dollar", "yield", "iran"]),
+    ("Sector Rotation", ["sector rotation", "staples", "defensive", "rotation"]),
+    ("Volatility / VIX", ["vix"]),
+    ("The Levels That Matter", ["levels that matter", "needs to hold", "support at", "the levels"]),
+    ("The Projection", ["projection", "divergence", "base case"]),
+    ("Next Catalyst: Micron", ["micron"]),
+    ("Outro & Disclaimer", ["educational content", "not financial advice",
+                            "ai-assisted", "projections can be wrong", "make your own"]),
+]
+
+
+def chapters_from_srt(cues, min_gap: float = 11.0) -> list[tuple[float, str]]:
+    """Build YouTube chapters with REAL timestamps from the captions.
+
+    Always starts at 0:00 (YouTube requires it), keeps them monotonic and at
+    least ``min_gap`` seconds apart (YouTube needs >=10s spacing).
+    """
+    chapters = [(0.0, "Intro")]
+    last = 0.0
+    for label, kws in CHAPTER_TOPICS:
+        for start, _end, text in cues:
+            if start <= last + min_gap:
+                continue
+            if any(k in text.lower() for k in kws):
+                chapters.append((start, label))
+                last = start
+                break
+    return chapters
 
 
 def _ticker_for_image(name: str) -> str | None:

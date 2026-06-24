@@ -170,7 +170,10 @@ NOT need to write them verbatim, but DO include the marked spots:
   why_it_matters) — based only on tickers/levels present in the packet.
 - `shorts`: 3–5 short-form clip ideas (see SHORTS INSTRUCTIONS).
 - `youtube_metadata`: title_options, recommended_title, description,
-  pinned_comment, hashtags, chapters, disclaimer.
+  pinned_comment, hashtags, chapters, disclaimer. NOTE: chapter timestamps must
+  fit the CONDENSED ~3-minute video (the voiceover), NOT the long-form script —
+  keep them within ~0:00–4:00. (The pipeline overwrites them with exact
+  timestamps from the captions when you voice it.)
 - `cards`: 5–7 on-screen TEXT cards for the video editor — short and glanceable,
   data-forward (numbers are good), in the channel tone. Each card has a `title`
   (the on-screen heading, e.g. "WHAT DROVE THE SELLOFF", "LEVELS I'M WATCHING"), a

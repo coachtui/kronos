@@ -30,7 +30,7 @@ def alignment_to_srt(alignment: dict, max_chars: int = 80) -> str:
 
     def flush():
         nonlocal buf, cue_start, cue_end
-        text = buf.strip()
+        text = " ".join(buf.split())  # collapse any internal newlines/spaces
         if text and cue_start is not None:
             cues.append((cue_start, cue_end if cue_end is not None else cue_start, text))
         buf, cue_start, cue_end = "", None, None
@@ -43,8 +43,8 @@ def alignment_to_srt(alignment: dict, max_chars: int = 80) -> str:
             cue_start = starts[i]
         buf += ch
         cue_end = ends[i]
-        is_space = ch == " "
-        boundary = is_space and (prev_nonspace in ".!?" or len(buf) >= max_chars)
+        is_ws = ch in " \n\t\r"  # newlines/paragraph breaks end a cue too
+        boundary = is_ws and (prev_nonspace in ".!?" or len(buf) >= max_chars)
         if ch.strip():
             prev_nonspace = ch
         if boundary:

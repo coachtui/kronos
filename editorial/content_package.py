@@ -101,6 +101,27 @@ def _voiceover_txt(pkg: dict) -> str:
     return body + "\n"
 
 
+def _mmss(seconds: float) -> str:
+    s = int(round(seconds))
+    h, s = divmod(s, 3600)
+    m, s = divmod(s, 60)
+    return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
+
+
+def update_metadata_chapters(path: Path, chapters: list[tuple[float, str]]) -> None:
+    """Replace the ## Chapters section of a metadata file with real timestamps."""
+    import re
+    body = "\n".join(f"{_mmss(t)} {label}" for t, label in chapters)
+    new_block = f"## Chapters\n{body}\n"
+    text = path.read_text()
+    if "## Chapters" in text:
+        text = re.sub(r"## Chapters\n.*?(?=\n## |\Z)", new_block.rstrip("\n"),
+                      text, count=1, flags=re.S)
+    else:
+        text = text.rstrip() + "\n\n" + new_block
+    path.write_text(text)
+
+
 def _cards_md(date: str, pkg: dict) -> str:
     out = [f"# On-Screen Text Cards — {date}\n",
            "Copy each block into a CapCut text box — short and glanceable.\n"]
