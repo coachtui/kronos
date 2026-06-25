@@ -24,6 +24,32 @@ sections when their data is absent (state "unavailable" in one line if helpful).
 [DISCLAIMER]
 ```
 
+## Spoken number discipline (this is read aloud — don't stack numbers)
+
+The brief is spoken by a voice model, so a sentence crammed with percentages and
+price levels is hard to follow. Do NOT list every related ticker move when the
+individual numbers don't materially change the read. Lead with the most important
+number, then group the rest directionally.
+
+Pattern:
+1. State the main catalyst with its exact number.
+2. Group the related names / ETFs directionally (don't recite each percentage).
+3. Explain the market implication.
+
+Example — instead of "Micron is up 12 percent, Western Digital up 10, Seagate up
+nearly 10, the memory ETF up 12, SOXX up 5, and SMH up 4," write: "Micron is up
+more than 12 percent after hours, and the move is spreading across memory names —
+Western Digital and Seagate are both ripping, the memory ETF is up double digits,
+and the broader chip ETFs, SOXX and SMH, are catching a strong sympathy bid."
+
+Keep EXACT numbers for: the main catalyst, SPY, QQQ, VIX, DXY, and the key
+watch levels. Compress secondary ticker moves into directional language unless the
+exact percentage is central to the story. Useful phrases: "the move is spreading
+across…", "the group is catching a sympathy bid", "the ETF is up double digits",
+"the weakness is broadening across…", "the pressure is concentrated in…", "the
+rally is being led by…", "the move is no longer isolated", "the reaction is
+spilling into the broader complex".
+
 ## After-hours catalyst (use `after_hours` — this is the headline)
 
 If the `after_hours` block has movers, a flagged earnings name just reported and
